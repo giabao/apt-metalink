@@ -76,7 +76,7 @@ class AptMetalink:
         else:
             self.cache.commit(apt.progress.text.AcquireProgress())
 
-    def _download(self, pkgs, num_concurrent=1):
+    def _download(self, pkgs, num_concurrent, num_split=12):
         if not pkgs:
             return True
         partial_dir = os.path.join(self.archive_dir, 'partial')
@@ -90,8 +90,8 @@ class AptMetalink:
                    '--remote-time=true',
                    '--auto-save-interval=0',
                    '--continue',
-                   '--split=8',
-                   '--max-connection-per-server=8',
+                   '--split={0}'.format(num_split),
+                   '--max-connection-per-server={0}'.format(num_split),
                    '--min-split-size=1M'
                    ]
         if self.opts.hash_check:
